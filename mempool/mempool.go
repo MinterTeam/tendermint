@@ -2,6 +2,8 @@ package mempool
 
 import (
 	"fmt"
+	"github.com/tendermint/tendermint/libs/clist"
+	"github.com/tendermint/tendermint/libs/log"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/p2p"
@@ -76,6 +78,12 @@ type Mempool interface {
 	// CloseWAL closes and discards the underlying WAL file.
 	// Any further writes will not be relayed to disk.
 	CloseWAL()
+
+	SetLogger(l log.Logger)
+
+	TxsWaitChan() <-chan struct{}
+
+	TxsFront() *clist.CElement
 }
 
 //--------------------------------------------------------------------------------
