@@ -3,6 +3,7 @@ package consensus
 import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/clist"
+	"github.com/tendermint/tendermint/libs/log"
 	mempl "github.com/tendermint/tendermint/mempool"
 	tmstate "github.com/tendermint/tendermint/proto/tendermint/state"
 	"github.com/tendermint/tendermint/proxy"
@@ -40,6 +41,7 @@ func (emptyMempool) TxsBytes() int64               { return 0 }
 
 func (emptyMempool) TxsFront() *clist.CElement    { return nil }
 func (emptyMempool) TxsWaitChan() <-chan struct{} { return nil }
+func (emptyMempool) SetLogger(_ log.Logger) {}
 
 func (emptyMempool) InitWAL() error { return nil }
 func (emptyMempool) CloseWAL()      {}
