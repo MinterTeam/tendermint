@@ -101,6 +101,7 @@ func DefaultNewNode(config *cfg.Config, logger log.Logger) (*Node, error) {
 		DefaultGenesisDocProviderFunc(config),
 		DefaultDBProvider,
 		DefaultMetricsProvider(config.Instrumentation),
+		nil,
 		logger,
 	)
 }
@@ -408,7 +409,7 @@ func createConsensusReactor(config *cfg.Config,
 	state sm.State,
 	blockExec *sm.BlockExecutor,
 	blockStore sm.BlockStore,
-	mempool *mempl.CListMempool,
+	mempool mempl.Mempool,
 	evidencePool *evidence.Pool,
 	privValidator types.PrivValidator,
 	csMetrics *cs.Metrics,
@@ -651,6 +652,9 @@ func NewNode(config *cfg.Config,
 	genesisDocProvider GenesisDocProvider,
 	dbProvider DBProvider,
 	metricsProvider MetricsProvider,
+// custom reactor
+	createMempoolAndMempoolReactorFunc func(config *cfg.Config, proxyApp proxy.AppConns, state sm.State, memplMetrics *mempl.Metrics, logger log.Logger) (*mempl.Reactor, mempl.Mempool),
+// --------------
 	logger log.Logger,
 	options ...Option) (*Node, error) {
 
@@ -734,7 +738,13 @@ func NewNode(config *cfg.Config,
 	csMetrics, p2pMetrics, memplMetrics, smMetrics := metricsProvider(genDoc.ChainID)
 
 	// Make MempoolReactor
-	mempoolReactor, mempool := createMempoolAndMempoolReactor(config, proxyApp, state, memplMetrics, logger)
+	var mempool mempl.Mempool
+	var mempoolReactor *mempl.Reactor
+	if createMempoolAndMempoolReactorFunc == nil {
+		mempoolReactor, mempool = createMempoolAndMempoolReactor(config, proxyApp, state, memplMetrics, logger)
+	} else {
+		mempoolReactor, mempool = createMempoolAndMempoolReactorFunc(config, proxyApp, state, memplMetrics, logger)
+	}
 
 	// Make Evidence Reactor
 	evidenceReactor, evidencePool, err := createEvidenceReactor(config, dbProvider, stateDB, blockStore, logger)
