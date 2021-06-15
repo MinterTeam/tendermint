@@ -235,7 +235,7 @@ func (memR *Reactor) broadcastTxRoutine(peer p2p.Peer) {
 
 		// Allow for a lag of 1 block.
 		memTx := next.Value.(*MempoolTx)
-		if peerState.GetHeight() < memTx.Height()-1 {
+		if peerState.GetHeight() < memTx.Height-1 {
 			time.Sleep(peerCatchupSleepIntervalMS * time.Millisecond)
 			continue
 		}
@@ -243,10 +243,10 @@ func (memR *Reactor) broadcastTxRoutine(peer p2p.Peer) {
 		// NOTE: Transaction batching was disabled due to
 		// https://github.com/tendermint/tendermint/issues/5796
 
-		if _, ok := memTx.senders.Load(peerID); !ok {
+		if _, ok := memTx.Senders.Load(peerID); !ok {
 			msg := protomem.Message{
 				Sum: &protomem.Message_Txs{
-					Txs: &protomem.Txs{Txs: [][]byte{memTx.tx}},
+					Txs: &protomem.Txs{Txs: [][]byte{memTx.Tx}},
 				},
 			}
 			bz, err := msg.Marshal()

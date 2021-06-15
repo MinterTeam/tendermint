@@ -99,7 +99,6 @@ type PreCheckFunc func(types.Tx) error
 type PostCheckFunc func(types.Tx, *abci.ResponseCheckTx) error
 
 // TxInfo are parameters that get passed when attempting to add a tx to the
-// mempool.
 type TxInfo struct {
 	// SenderID is the internal peer ID used in the mempool to identify the
 	// sender, storing 2 bytes with each tx instead of 20 bytes for the p2p.ID.
