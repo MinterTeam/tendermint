@@ -1,6 +1,6 @@
 # Unreleased Changes
 
-## v0.34.11
+## v0.34.13
 
 Special thanks to external contributors on this release:
 
@@ -21,5 +21,6 @@ Friendly reminder, we have a [bug bounty program](https://hackerone.com/tendermi
 ### FEATURES
 
 ### IMPROVEMENTS
+
 
 ### BUG FIXES
