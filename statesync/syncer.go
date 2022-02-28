@@ -486,8 +486,8 @@ func (s *syncer) verifyApp(snapshot *snapshot, appVersion uint64) error {
 	if resp.AppVersion != appVersion {
 		// An error here most likely means that the app hasn't inplemented state sync
 		// or the Info call correctly
-		return fmt.Errorf("app version mismatch. Expected: %d, got: %d",
-			appVersion, resp.AppVersion)
+		//return fmt.Errorf("app version mismatch. Expected: %d, got: %d",
+		//	appVersion, resp.AppVersion)
 	}
 	if !bytes.Equal(snapshot.trustedAppHash, resp.LastBlockAppHash) {
 		s.logger.Error("appHash verification failed",
